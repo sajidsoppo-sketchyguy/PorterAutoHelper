@@ -39,10 +39,32 @@ jobs:
           unzip -q PorterAutoHelper_Android_Starter.zip -d project
           find project -maxdepth 3 -type f | head -80
 
+      
       - name: Build APK
         run: |
           cd project
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path("app/build.gradle.kts")
+          s = p.read_text()
+
+          if "sourceCompatibility = JavaVersion.VERSION_17" not in s:
+              s = s.replace(
+                  "android {",
+                  """android {
+              compileOptions {
+                  sourceCompatibility = JavaVersion.VERSION_17
+                  targetCompatibility = JavaVersion.VERSION_17
+              }""",
+                  1
+              )
+              p.write_text(s)
+
+          print("Java target configuration checked.")
+          PY
           gradle assembleDebug
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
