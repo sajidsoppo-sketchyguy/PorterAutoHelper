@@ -42,12 +42,21 @@ jobs:
       
       - name: Build APK
         run: |
+      
+      - name: Build APK
+        run: |
           cd project
           python3 - <<'PY'
           from pathlib import Path
 
           p = Path("app/build.gradle.kts")
+          if not p.exists():
+              raise SystemExit(f"Gradle file not found: {p}")
+
           s = p.read_text()
+
+          if "android {" not in s:
+              raise SystemExit("Android configuration block not found")
 
           if "sourceCompatibility = JavaVersion.VERSION_17" not in s:
               s = s.replace(
@@ -59,11 +68,22 @@ jobs:
               }""",
                   1
               )
-              p.write_text(s)
 
-          print("Java target configuration checked.")
+          if "kotlinOptions" not in s:
+              s = s.replace(
+                  "android {",
+                  """android {
+              kotlinOptions {
+                  jvmTarget = "17"
+              }""",
+                  1
+              )
+
+          p.write_text(s)
+          print("Java and Kotlin target configuration checked.")
           PY
           gradle assembleDebug
+
 
 
       - name: Upload APK
