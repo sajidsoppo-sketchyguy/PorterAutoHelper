@@ -36,13 +36,9 @@ jobs:
       - name: Extract project
         run: |
           mkdir project
-          unzip -q PorterAutoHelper_Android_Starter.zip -d project
+          unzip -q PorterAutoHelper_v3_Classic_Source.zip -d project
           find project -maxdepth 3 -type f | head -80
 
-      
-      - name: Build APK
-        run: |
-      
       - name: Build APK
         run: |
           cd project
@@ -83,8 +79,6 @@ jobs:
           print("Java and Kotlin target configuration checked.")
           PY
           gradle assembleDebug
-
-
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
