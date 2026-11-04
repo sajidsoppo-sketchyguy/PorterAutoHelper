@@ -32,7 +32,13 @@ jobs:
           SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
           yes | "$SDKMANAGER" --licenses || true
           "$SDKMANAGER" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+      
+      - name: Verify source ZIP
+        run: |
+          test -f PorterAutoHelper_v3_Classic_Source.zip
+          unzip -t PorterAutoHelper_v3_Classic_Source.zip
 
+    
       - name: Extract project
         run: |
           mkdir project
@@ -78,7 +84,7 @@ jobs:
           p.write_text(s)
           print("Java and Kotlin target configuration checked.")
           PY
-          gradle assembleDebug
+          gradle clean assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
