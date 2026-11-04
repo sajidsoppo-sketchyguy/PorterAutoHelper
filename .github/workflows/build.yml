@@ -35,14 +35,14 @@ jobs:
       
       - name: Verify source ZIP
         run: |
-          test -f PorterAutoHelper_v3_Classic_Source.zip
-          unzip -t PorterAutoHelper_v3_Classic_Source.zip
+          test -f PorterAutoHelper_v0.5_GitHub_Upload.zip
+          unzip -t PorterAutoHelper_v0.5_GitHub_Upload.zip
 
     
       - name: Extract project
         run: |
           mkdir project
-          unzip -q PorterAutoHelper_v3_Classic_Source.zip -d project
+          unzip -q PorterAutoHelper_v0.5_GitHub_Upload.zip -d project
           find project -maxdepth 3 -type f | head -80
 
       - name: Build APK
